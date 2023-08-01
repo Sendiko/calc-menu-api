@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RestaurantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post("resto/login", [RestaurantController::class ,"login"]);
+Route::post("resto/register", [RestaurantController::class ,"register"]);
+
+Route::middleware("auth:sanctum")->group(function () {
+    Route::post("resto/logout", [RestaurantController::class, "logout"]);
 });
