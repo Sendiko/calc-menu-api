@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class RestaurantController extends Controller
 {
@@ -61,6 +63,34 @@ class RestaurantController extends Controller
             "message" => "berhasil logout",
             "token" => "null",
             "token_type" => "null"
+        ]);
+    }
+
+    function createEmployeeAccount(Request $request) {
+
+        $validator = $request->validate([
+            "name" => "required|string|max:255",
+            "email" => "required|string",
+            "password" => "required|string|min:6"
+        ]);
+
+        function generateEmployeeId() {
+            $today = date('Ymd');
+            $id = $today . Str::random(6);
+            return $id;
+        }
+
+        $employee = Employee::create([
+            "employee_id" => generateEmployeeId(),
+            "name" => $validator["name"],
+            "email" => $validator["email"],
+            "password" => Hash::make($validator["password"])
+        ]);
+
+        return response()->json([
+            "status" => 201,
+            "message" => "$employee->name account is created!",
+            "account" => $employee
         ]);
     }
 }
