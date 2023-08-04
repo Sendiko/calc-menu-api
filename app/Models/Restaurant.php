@@ -14,7 +14,9 @@ class Restaurant extends Model
     protected $fillable = [
         "name",
         "email",
-        "password"
+        "password",
+        "address",
+        "phone_contact"
     ];
 
 }

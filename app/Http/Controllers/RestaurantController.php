@@ -39,14 +39,20 @@ class RestaurantController extends Controller
 
         $validator = $request->validate([
             "name" => "required|string|max:255",
+            "address" => "required|string|max:255",
+            "phone_contact" => "required|string|max:255",
             "email" => "required|string",
             "password" => "required|string|min:6|confirmed"
         ]);
 
         $restaurant = Restaurant::create([
             "name" => $validator["name"],
+            "address" => $validator["address"],
+            "phone_contact" => $validator["phone_contact"],
             "email" => $validator["email"],
             "password" => Hash::make($validator["password"]),
+            "address" => $validator["address"],
+            "phone_contact" => $validator["phone_contact"]
         ]);
 
         return response()->json([
