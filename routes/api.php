@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RestaurantController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,8 @@ Route::post("emp/login", [EmployeeController::class ,"login"]);
 Route::middleware("auth:sanctum")->group(function () {
     Route::post("resto/logout", [RestaurantController::class, "logout"]);
     Route::post("emp/logout", [EmployeeController::class, "logout"]);
-    Route::post("resto/createEmployee", [RestaurantController::class, "createEmployeeAccount"]);
+    Route::post("resto/create_employee", [RestaurantController::class, "createEmployeeAccount"]);
+    Route::resource("menu", MenuController::class);
+    Route::post("test", [MenuController::class, "test"]);
+    Route::post("menu/update_image/", [MenuController::class, "updateImage"]);
 });

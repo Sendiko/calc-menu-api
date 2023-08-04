@@ -91,6 +91,6 @@ class RestaurantController extends Controller
             "status" => 201,
             "message" => "$employee->name account is created!",
             "account" => $employee
-        ]);
+        ], 201);
     }
 }
