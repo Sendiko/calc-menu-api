@@ -13,6 +13,7 @@ class Menu extends Model
         "name",
         "description",
         "category",
+        "price",
         "imageUrl"
     ];
 }
