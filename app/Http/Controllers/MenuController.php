@@ -32,7 +32,8 @@ class MenuController extends Controller
             "name" => "required|string|max:60",
             "description" => "required|string|max:255",
             "category" => "required|string|in:food,beverage",
-            "image" => "required|image|mimes:jpg,jpeg,png"
+            "image" => "required|image|mimes:jpg,jpeg,png",
+            "price" => "required|integer"
         ]);
 
         $user = auth()->user();
@@ -55,6 +56,7 @@ class MenuController extends Controller
                 "description" => $validator["description"],
                 "category" => $validator["category"],
                 "imageUrl" => $imageUrl,
+                "price" => $validator["price"]
             ]);
 
             return response()->json([
@@ -82,7 +84,8 @@ class MenuController extends Controller
             "name" => "string|max:60",
             "description" => "string|max:255",
             "category" => "string|in:food,beverage",
-            "image" => "image|mimes:jpg,jpeg,png"
+            "image" => "image|mimes:jpg,jpeg,png",
+            "price" => "integer"
         ]);
 
         $user = auth()->user();
@@ -97,9 +100,10 @@ class MenuController extends Controller
         $menu = Menu::findorFail($id);
 
         $menu->update([
-            "name" => $validator["name"],
-            "description" => $validator["description"],
-            "category" => $validator["category"],
+            "name" => $validator["name"] ?? $menu->name,
+            "description" => $validator["description"] ?? $menu->description,
+            "category" => $validator["category"] ?? $menu->category,
+            "price" => $validator["price"] ?? $menu->price,
         ]);
 
         return response()->json([

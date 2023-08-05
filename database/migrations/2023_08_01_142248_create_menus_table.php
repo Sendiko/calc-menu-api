@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("description");
             $table->enum("category", ["food", "beverage"])->default("food");
+            $table->integer("price");
             $table->string("imageUrl");
             $table->timestamps();
         });
