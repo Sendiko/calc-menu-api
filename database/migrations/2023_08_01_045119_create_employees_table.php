@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("restaurant_id");
             $table->timestamps();
         });
+        
     }
 
     /**
