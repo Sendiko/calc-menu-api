@@ -77,7 +77,8 @@ class RestaurantController extends Controller
         $validator = $request->validate([
             "name" => "required|string|max:255",
             "email" => "required|string",
-            "password" => "required|string|min:6"
+            "password" => "required|string|min:6",
+            "restaurant_id" => "required|string"
         ]);
 
         function generateEmployeeId() {
@@ -90,7 +91,8 @@ class RestaurantController extends Controller
             "employee_id" => generateEmployeeId(),
             "name" => $validator["name"],
             "email" => $validator["email"],
-            "password" => Hash::make($validator["password"])
+            "password" => Hash::make($validator["password"]),
+            "restaurant_id" => $validator["restaurant_id"]
         ]);
 
         return response()->json([
