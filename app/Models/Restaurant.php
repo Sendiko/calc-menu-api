@@ -16,7 +16,8 @@ class Restaurant extends Model
         "email",
         "password",
         "address",
-        "phone_contact"
+        "phone_contact",
+        "imageUrl"
     ];
 
 }
