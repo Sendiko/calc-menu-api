@@ -16,6 +16,7 @@ class Employee extends Model
         "name",
         "email",
         "password",
-        "restaurant_id"
+        "restaurant_id",
+        "imageUrl"
     ];
 }
