@@ -49,7 +49,7 @@ class MenuController extends Controller
             $image = $request->file("image");
             $fileName = $image->hashName();
             $image->storeAs("public/images/", $fileName);
-            $imageUrl = url("storage/images/" . $fileName);
+            $imageUrl = url("storage/images/menu/" . $fileName);
 
             $menu = Menu::create([
                 "name" => $validator["name"],
@@ -150,12 +150,12 @@ class MenuController extends Controller
             $image = $request->file("image");
             $fileName = $image->hashName();
             $oldFileName = $menu->imageUrl;
-            $oldImagePath = public_path("public/images/" . $oldFileName);
+            $oldImagePath = public_path("public/images/menu/" . $oldFileName);
     
             File::delete($oldImagePath);
     
-            $image->storeAs("public/images/", $fileName);
-            $imageUrl = url("storage/images/" . $fileName);
+            $image->storeAs("public/images/menu/", $fileName);
+            $imageUrl = url("storage/images/menu/" . $fileName);
     
             $menu->update([
                 "imageUrl" => $imageUrl,
