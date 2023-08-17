@@ -72,7 +72,8 @@ class RestaurantController extends Controller
         ]);
     }
 
-    function createEmployeeAccount(Request $request) {
+    function createEmployeeAccount(Request $request) 
+    {
 
         $validator = $request->validate([
             "name" => "required|string|max:255",
@@ -101,4 +102,39 @@ class RestaurantController extends Controller
             "account" => $employee
         ], 201);
     }
+
+    function uploadProfile(Request $request) 
+    {
+
+        $validator = $request->validate([
+            "image" => "required|image|mimes:jpg,jpeg,png",
+        ]);
+
+        $user = auth()->user();
+
+        if (!$restaurant = Restaurant::where("email", $user->email)->first()) {
+            return response()->json([
+                "status" => 403,
+                "message" => "you're not authorized"
+            ], 403);
+        }
+
+        if($request->hasFile("image")){
+            $image = $request->file("image");
+            $fileName = $image->hashName();
+            $image->storeAs("public/images/restaurant/", $fileName);
+            $imageUrl = url("storage/images/restaurant/" . $fileName);  
+
+            $restaurant->update([
+                "imageUrl" => $imageUrl
+            ]);
+        }
+
+        return response()->json([
+            "status" => 200,
+            "message" => "profile picture updated!",
+            "imageUrl" => $imageUrl
+        ]);
+    }
+
 }

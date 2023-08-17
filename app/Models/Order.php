@@ -15,6 +15,7 @@ class Order extends Model
         "table_number",
         "total_price",
         "payed",
-        "menu_ids"
+        "menu_ids",
+        "menu_notes"
     ];
 }

@@ -41,4 +41,38 @@ class EmployeeController extends Controller
         ]);
     }
 
+    function uploadProfile(Request $request) 
+    {
+
+        $validator = $request->validate([
+            "image" => "required|image|mimes:jpg,jpeg,png",
+        ]);
+
+        $user = auth()->user();
+
+        if (!$employee = Employee::where("email", $user->email)->first()) {
+            return response()->json([
+                "status" => 403,
+                "message" => "you're not authorized"
+            ], 403);
+        }
+
+        if($request->hasFile("image")){
+            $image = $request->file("image");
+            $fileName = $image->hashName();
+            $image->storeAs("public/images/employee/", $fileName);
+            $imageUrl = url("storage/images/employee/" . $fileName);  
+
+            $employee->update([
+                "imageUrl" => $imageUrl
+            ]);
+        }
+
+        return response()->json([
+            "status" => 200,
+            "message" => "profile picture updated!",
+            "imageUrl" => $imageUrl
+        ]);
+    }
+
 }

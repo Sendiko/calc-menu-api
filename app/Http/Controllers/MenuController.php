@@ -48,8 +48,8 @@ class MenuController extends Controller
         if ($request->hasFile("image")) {
             $image = $request->file("image");
             $fileName = $image->hashName();
-            $image->storeAs("public/images/", $fileName);
-            $imageUrl = url("storage/images/" . $fileName);
+            $image->storeAs("public/images/menu/", $fileName);
+            $imageUrl = url("storage/images/menu/" . $fileName);
 
             $menu = Menu::create([
                 "name" => $validator["name"],
@@ -121,7 +121,6 @@ class MenuController extends Controller
         $menu = Menu::findOrFail($id);
         $menu->delete();
 
-
         return response()->json([
             "status" => 200,
             "messages" => "menu deleted successfully!",
@@ -134,41 +133,40 @@ class MenuController extends Controller
             "id" => "required|string",
             "image" => "image|mimes:jpg,jpeg,png"
         ]);
-    
+
         $user = auth()->user();
-    
+
         if (!$restaurant = Restaurant::where("email", $user->email)->first()) {
             return response()->json([
                 "status" => 403,
                 "message" => "you're not authorized"
             ], 403);
         }
-    
+
         $menu = Menu::findorFail($validator["id"]);
-    
+
         if ($request->hasFile("image")) {
             $image = $request->file("image");
             $fileName = $image->hashName();
             $oldFileName = $menu->imageUrl;
-            $oldImagePath = public_path("public/images/" . $oldFileName);
-    
+            $oldImagePath = public_path("public/images/menu/" . $oldFileName);
+
             File::delete($oldImagePath);
-    
-            $image->storeAs("public/images/", $fileName);
-            $imageUrl = url("storage/images/" . $fileName);
-    
+
+            $image->storeAs("public/images/menu/", $fileName);
+            $imageUrl = url("storage/images/menu/" . $fileName);
+
             $menu->update([
                 "imageUrl" => $imageUrl,
             ]);
         } else {
             $menu->imageUrl = null;
         }
-    
+
         return response()->json([
             "status" => 200,
             "messages" => "image updated successfully!",
             "menu" => $menu->imageUrl
         ], 200);
     }
-    
 }
