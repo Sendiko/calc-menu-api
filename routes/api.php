@@ -29,4 +29,6 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::resource("menu", MenuController::class);
     Route::resource("order", OrderController::class);
     Route::post("menu/update_image/", [MenuController::class, "updateImage"]);
+    Route::post("resto/upload_image", [RestaurantController::class, "uploadProfile"]);
+    Route::post("emp/upload_image", [EmployeeController::class, "uploadProfile"]);
 });
