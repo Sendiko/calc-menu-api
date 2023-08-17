@@ -29,7 +29,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $validated_data = $request->validate([
+        $validator = $request->validate([
             "table_number" => "required|string|max:255",
             "menu_ids" => "required|array",
             "menu_notes" => "array"
@@ -37,16 +37,16 @@ class OrderController extends Controller
 
         $emp = auth()->user();
         $restaurant = Restaurant::find($emp->restaurant_id);
-        $menu_data = array_map(function ($menuId, $menuNote) use ($validated_data) {
+        $menuData = array_map(function ($menuId, $menuNote) use ($validator) {
             $menu = Menu::find($menuId);
             return [
                 'menu_name' => $menu->name,
                 'menu_price' => $menu->price,
                 'menu_notes' => $menuNote,
             ];
-        }, $validated_data['menu_ids'], $validated_data['menu_notes']);
+        }, $validator['menu_ids'], $validator['menu_notes']);
 
-        $total_price = array_reduce($validated_data['menu_ids'], function ($carry, $menuId) {
+        $totalPrice = array_reduce($validator['menu_ids'], function ($carry, $menuId) {
             $menu = Menu::find($menuId);
             return $carry + $menu->price;
         }, 0);
@@ -60,19 +60,19 @@ class OrderController extends Controller
 
         $order = Order::create([
             "transaction_id" => generateTransactionId(),
-            "table_number" => $validated_data["table_number"],
+            "table_number" => $validator["table_number"],
             "restaurant_name" => $restaurant->name,
-            "total_price" => $total_price,
+            "total_price" => $totalPrice,
             "payed" => 0,
-            "menu_ids" => json_encode($validated_data["menu_ids"]),
-            "menu_notes" => json_encode($validated_data["menu_notes"])
+            "menu_ids" => json_encode($validator["menu_ids"]),
+            "menu_notes" => json_encode($validator["menu_notes"])
         ]);
 
         return response()->json([
             "status" => 201,
             "message" => "data stored successfully!",
             "order" => $order,
-            "menu_data" => $menu_data,
+            "menu_data" => $menuData,
         ], 201);
     }
 
@@ -165,13 +165,13 @@ class OrderController extends Controller
             }
         }
 
-        $menu_data = array_values($menuCounts); // Convert associative array to indexed array
+        $menuData = array_values($menuCounts); // Convert associative array to indexed array
 
         return response()->json([
             "status" => 200,
             "message" => "data updated successfully!",
             "order" => $order,
-            "menus" => $menu_data,
+            "menus" => $menuData,
         ], 200);
     }
 
