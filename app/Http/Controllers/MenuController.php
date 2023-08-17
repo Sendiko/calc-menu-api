@@ -48,7 +48,7 @@ class MenuController extends Controller
         if ($request->hasFile("image")) {
             $image = $request->file("image");
             $fileName = $image->hashName();
-            $image->storeAs("public/images/", $fileName);
+            $image->storeAs("public/images/menu/", $fileName);
             $imageUrl = url("storage/images/menu/" . $fileName);
 
             $menu = Menu::create([
