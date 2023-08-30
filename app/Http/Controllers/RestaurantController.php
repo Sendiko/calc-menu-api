@@ -137,8 +137,9 @@ class RestaurantController extends Controller
         ]);
     }
 
-    function getProfile(int $id) {
-        $resto = Restaurant::findOrFail($id);
+    function getProfile() {
+        $id = auth()->user();
+        $resto = Restaurant::findOrfail($id);
 
         return response()->json([
             "status" => 200,
