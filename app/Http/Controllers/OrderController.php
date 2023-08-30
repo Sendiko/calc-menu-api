@@ -125,13 +125,6 @@ class OrderController extends Controller
     {
         $user = auth()->user();
 
-        if (!$restaurant = Restaurant::where("email", $user->email)->first()) {
-            return response()->json([
-                "status" => 403,
-                "message" => "you're not authorized"
-            ], 403);
-        }
-
         $validator = $request->validate([
             "table_number" => "string",
             "payed" => "tinyInterger",
