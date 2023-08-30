@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -73,6 +74,26 @@ class EmployeeController extends Controller
             "message" => "profile picture updated!",
             "imageUrl" => $imageUrl
         ]);
+    }
+
+    function getEmployeeList() {
+        $user = auth()->user();
+
+        if (!$restaurant = Restaurant::where("email", $user->email)->first()) {
+            return response()->json([
+                "status" => 403,
+                "message" => "you're not authorized"
+            ], 403);
+        }
+
+        $employees = Employee::all();
+
+        return response()->json([
+            "status" => 200,
+            "message" => "data sent successfully!",
+            "employees" => $employees
+        ]);
+        
     }
 
 }
