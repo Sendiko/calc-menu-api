@@ -19,7 +19,7 @@ class OrderController extends Controller
         $orders = Order::all();
         return response()->json([
             "status" => 200,
-            "message" => "data retrieved successfully!",
+            "message" => "data sent successfully!",
             "orders" => $orders
         ]);
     }
@@ -112,7 +112,7 @@ class OrderController extends Controller
 
         return response()->json([
             "status" => 200,
-            "message" => "data retrieved successfully!",
+            "message" => "data sent successfully!",
             "order" => $order,
             "menus" => $menuCounts,
         ], 200);
@@ -173,12 +173,22 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
+
+        $user = auth()->user();
+
+        if (!$restaurant = Restaurant::where("email", $user->email)->first()) {
+            return response()->json([
+                "status" => 403,
+                "message" => "you're not authorized"
+            ], 403);
+        }
+
         $order = Order::findOrFail($id);
         $order->delete();
 
         return response()->json([
             "status" => 200,
-            "data successfully deletd!"
+            "data deleted successfully!"
         ]);
     }
 }
