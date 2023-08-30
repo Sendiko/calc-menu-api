@@ -66,7 +66,7 @@ class RestaurantController extends Controller
         auth("sanctum")->user()->tokens()->delete();
         return response()->json([
             "status" => 200,
-            "message" => "berhasil logout",
+            "message" => "Logged out!",
             "token" => "null",
             "token_type" => "null"
         ]);
@@ -134,6 +134,16 @@ class RestaurantController extends Controller
             "status" => 200,
             "message" => "profile picture updated!",
             "imageUrl" => $imageUrl
+        ]);
+    }
+
+    function getProfile(int $id) {
+        $resto = Restaurant::findOrFail($id);
+
+        return response()->json([
+            "status" => 200,
+            "message" => "data sent successfully!",
+            "restaurant" => $resto
         ]);
     }
 
