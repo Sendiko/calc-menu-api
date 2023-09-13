@@ -127,7 +127,8 @@ class OrderController extends Controller
 
         $validator = $request->validate([
             "table_number" => "string",
-            "payed" => "tinyInterger",
+            "payed" => "tinyInteger",
+            "delivered" => "tinyInteger",
             "menu_ids" => "array"
         ]);
 
@@ -139,6 +140,7 @@ class OrderController extends Controller
         $order->update([
             "table_number" => $validator["table_number"] ?? $order->table_number,
             "payed" => $validator["payed"] ?? $order->payed,
+            "delivered" => $validator["delivered"] ?? $order->delivered,
             "menu_ids" => $menu_ids,
         ]);
 

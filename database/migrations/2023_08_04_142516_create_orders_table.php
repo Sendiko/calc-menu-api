@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("table_number");
             $table->string("total_price");
             $table->tinyInteger("payed");
+            $table->tinyInteger("delivered")->default(0);
             $table->json('menu_ids');
             $table->json('menu_notes');
             $table->timestamps();
