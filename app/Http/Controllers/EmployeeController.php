@@ -27,7 +27,8 @@ class EmployeeController extends Controller
             return response()->json([
                 "status" => 200,
                 "message" => "$employee->name logged in successfully",
-                "token" => $token
+                "token" => $token,
+                "user" => $employee
             ]);
         }
     }
