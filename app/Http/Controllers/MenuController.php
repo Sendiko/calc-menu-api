@@ -33,7 +33,8 @@ class MenuController extends Controller
             "description" => "required|string|max:255",
             "category" => "required|string|in:food,beverage",
             "image" => "required|image|mimes:jpg,jpeg,png",
-            "price" => "required|integer"
+            "price" => "required|integer",
+            "restaurant_id" => "required|integer"
         ]);
 
         $user = auth()->user();
@@ -56,7 +57,8 @@ class MenuController extends Controller
                 "description" => $validator["description"],
                 "category" => $validator["category"],
                 "imageUrl" => $imageUrl,
-                "price" => $validator["price"]
+                "price" => $validator["price"],
+                "restaurant_id" => $validator["restaurant_id"]
             ]);
 
             return response()->json([
@@ -72,7 +74,12 @@ class MenuController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $menus = Menu::where("restaurant_id", $id)->get();
+        return response()->json([
+            "status" => 200,
+            "message" => "data sent successfully!",
+            "menus" => $menus
+        ], 200);
     }
 
     /**

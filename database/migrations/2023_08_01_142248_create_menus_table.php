@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum("category", ["food", "beverage"])->default("food");
             $table->integer("price");
             $table->string("imageUrl");
+            $table->integer("restaurant_id")->default(0);
             $table->timestamps();
         });
     }
