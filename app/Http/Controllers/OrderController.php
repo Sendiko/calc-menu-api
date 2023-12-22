@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\Employee;
 use App\Models\Order;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
@@ -36,14 +37,30 @@ class OrderController extends Controller
         ]);
 
         $emp = auth()->user();
-        $restaurant = Restaurant::find($emp->restaurant_id);
+        $isEmployee = Employee::where("email", $emp->email)->firstOrFail();
+        if($isEmployee){
+            $restaurant = Restaurant::find($emp->restaurant_id);  
+        } else {
+            return response()->json([
+                "status" => 401,
+                "message" => "Unauthenticated"
+            ]);
+        }
         $menuData = array_map(function ($menuId, $menuNote) use ($validator) {
             $menu = Menu::find($menuId);
-            return [
-                'menu_name' => $menu->name,
-                'menu_price' => $menu->price,
-                'menu_notes' => $menuNote,
-            ];
+            if ($menu) {
+                return [
+                    'menu_name' => $menu->name,  
+                    'menu_price' => $menu->price,
+                    'menu_notes' => $menuNote,
+                ];
+            } else {
+                return [
+                    'menu_name' => 'Menu not found',
+                    'menu_price' => 0,
+                    'menu_notes' => $menuNote,
+                ];
+            }
         }, $validator['menu_ids'], $validator['menu_notes']);
 
         $totalPrice = array_reduce($validator['menu_ids'], function ($carry, $menuId) {
