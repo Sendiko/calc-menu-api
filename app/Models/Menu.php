@@ -14,6 +14,7 @@ class Menu extends Model
         "description",
         "category",
         "price",
-        "imageUrl"
+        "imageUrl",
+        "restaurant_id"
     ];
 }

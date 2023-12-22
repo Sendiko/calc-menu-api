@@ -33,7 +33,8 @@ class MenuController extends Controller
             "description" => "required|string|max:255",
             "category" => "required|string|in:food,beverage",
             "image" => "required|image|mimes:jpg,jpeg,png",
-            "price" => "required|integer"
+            "price" => "required|integer",
+            "restaurant_id" => "required|integer"
         ]);
 
         $user = auth()->user();
@@ -49,14 +50,15 @@ class MenuController extends Controller
             $image = $request->file("image");
             $fileName = $image->hashName();
             $image->storeAs("public/images/menu/", $fileName);
-            $imageUrl = url("storage/images/menu/" . $fileName);
+            $imageUrl = url("public/images/menu/" . $fileName);
 
             $menu = Menu::create([
                 "name" => $validator["name"],
                 "description" => $validator["description"],
                 "category" => $validator["category"],
                 "imageUrl" => $imageUrl,
-                "price" => $validator["price"]
+                "price" => $validator["price"],
+                "restaurant_id" => $validator["restaurant_id"]
             ]);
 
             return response()->json([
@@ -72,7 +74,12 @@ class MenuController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $menus = Menu::where("restaurant_id", $id)->get();
+        return response()->json([
+            "status" => 200,
+            "message" => "data sent successfully!",
+            "menus" => $menus
+        ], 200);
     }
 
     /**
@@ -85,7 +92,8 @@ class MenuController extends Controller
             "description" => "string|max:255",
             "category" => "string|in:food,beverage",
             "image" => "image|mimes:jpg,jpeg,png",
-            "price" => "integer"
+            "price" => "integer",
+            "restaurant_id" => "integer"
         ]);
 
         $user = auth()->user();
@@ -104,6 +112,7 @@ class MenuController extends Controller
             "description" => $validator["description"] ?? $menu->description,
             "category" => $validator["category"] ?? $menu->category,
             "price" => $validator["price"] ?? $menu->price,
+            "restaurant_id" => $validator["restaurant_id"] ?? $menu->restaurant_id
         ]);
 
         return response()->json([
