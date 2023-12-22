@@ -92,7 +92,8 @@ class MenuController extends Controller
             "description" => "string|max:255",
             "category" => "string|in:food,beverage",
             "image" => "image|mimes:jpg,jpeg,png",
-            "price" => "integer"
+            "price" => "integer",
+            "restaurant_id" => "integer"
         ]);
 
         $user = auth()->user();
@@ -111,6 +112,7 @@ class MenuController extends Controller
             "description" => $validator["description"] ?? $menu->description,
             "category" => $validator["category"] ?? $menu->category,
             "price" => $validator["price"] ?? $menu->price,
+            "restaurant_id" => $validator["restaurant_id"] ?? $menu->restaurant_id
         ]);
 
         return response()->json([
