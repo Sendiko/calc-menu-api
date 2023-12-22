@@ -15,7 +15,7 @@
     
     </head>
     <body class="antialiased">
-        <div class="d-flex p-5 justify-content-center">
+        <div class="d-flex p-5 justify-content-center align-content-center w-100 h-100 bg-dark">
             <img src="{{URL('/images/logo_and_text_white.png')}}"/>
         </div>
     </body>
