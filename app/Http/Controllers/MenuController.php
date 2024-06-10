@@ -50,7 +50,7 @@ class MenuController extends Controller
             $image = $request->file("image");
             $fileName = $image->hashName();
             $image->storeAs("public/images/menu/", $fileName);
-            $imageUrl = url("public/images/menu/" . $fileName);
+            $imageUrl = url("storage/images/menu/" . $fileName);
 
             $menu = Menu::create([
                 "name" => $validator["name"],
@@ -127,7 +127,7 @@ class MenuController extends Controller
      */
     public function destroy(string $id)
     {
-        $menu = Menu::findOrFail($id);
+        $menu = Menu::findorFail($id);
         $menu->delete();
 
         return response()->json([
