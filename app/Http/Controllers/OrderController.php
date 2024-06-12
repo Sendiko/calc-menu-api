@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\API\OrderStoreRequest;
+use App\Http\Requests\API\OrderUpdateRequest;
 use App\Models\Menu;
 use App\Models\Employee;
 use App\Models\Order;
@@ -28,13 +30,9 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OrderStoreRequest $request)
     {
-        $validator = $request->validate([
-            "table_number" => "required|string|max:255",
-            "menu_ids" => "required|array",
-            "menu_notes" => "array"
-        ]);
+        $validator = $request->validated();
 
         $emp = auth()->user();
         $isEmployee = Employee::where("email", $emp->email)->firstOrFail();
@@ -138,16 +136,11 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(OrderUpdateRequest $request, string $id)
     {
         $user = auth()->user();
 
-        $validator = $request->validate([
-            "table_number" => "string",
-            "payed" => "tinyInteger",
-            "delivered" => "tinyInteger",
-            "menu_ids" => "array"
-        ]);
+        $validator = $request->validated();
 
         $menu_ids = json_encode($validator["menu_ids"]);
         $order = Order::findOrFail($id);
@@ -207,7 +200,7 @@ class OrderController extends Controller
 
         return response()->json([
             "status" => 200,
-            "data deleted successfully!"
+            "message" => "data deleted successfully!"
         ]);
     }
 }

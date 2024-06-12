@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\API\LoginRequest;
+use App\Http\Requests\API\UploadProfileRequest;
 use App\Models\Employee;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
@@ -9,11 +11,8 @@ use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
-    function login(Request $request) {
-        $validator = $request->validate([
-            "email" => "required|string",
-            "password" => "required|string|min:6"
-        ]);
+    function login(LoginRequest $request) {
+        $validator = $request->validated();
 
         $employee = Employee::where("email", $validator["email"])->firstOrFail();
         if (!$employee || !Hash::check($validator["password"], $employee->password)) {
@@ -43,12 +42,10 @@ class EmployeeController extends Controller
         ]);
     }
 
-    function uploadProfile(Request $request) 
+    function uploadProfile(UploadProfileRequest $request) 
     {
 
-        $validator = $request->validate([
-            "image" => "required|image|mimes:jpg,jpeg,png",
-        ]);
+        $validator = $request->validated();
 
         $user = auth()->user();
 

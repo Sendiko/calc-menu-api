@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\API\MenuUpdateRequest;
+use App\Http\Requests\API\UpdateImageRequest;
+use App\Http\Requests\MenuStoreRequest;
 use App\Models\Menu;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
@@ -25,17 +28,10 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(MenuStoreRequest $request)
     {
 
-        $validator = $request->validate([
-            "name" => "required|string|max:60",
-            "description" => "required|string|max:255",
-            "category" => "required|string|in:food,beverage",
-            "image" => "required|image|mimes:jpg,jpeg,png",
-            "price" => "required|integer",
-            "restaurant_id" => "required|integer"
-        ]);
+        $validator = $request->validated();
 
         $user = auth()->user();
 
@@ -85,16 +81,9 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(MenuUpdateRequest $request, $id)
     {
-        $validator = $request->validate([
-            "name" => "string|max:60",
-            "description" => "string|max:255",
-            "category" => "string|in:food,beverage",
-            "image" => "image|mimes:jpg,jpeg,png",
-            "price" => "integer",
-            "restaurant_id" => "integer"
-        ]);
+        $validator = $request->validated();
 
         $user = auth()->user();
 
@@ -136,12 +125,9 @@ class MenuController extends Controller
         ], 200);
     }
 
-    public function updateImage(Request $request)
+    public function updateImage(UpdateImageRequest $request)
     {
-        $validator = $request->validate([
-            "id" => "required|string",
-            "image" => "image|mimes:jpg,jpeg,png"
-        ]);
+        $validator = $request->validated();
 
         $user = auth()->user();
 

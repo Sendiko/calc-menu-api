@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\API\CreateEmployeeRequest;
+use App\Http\Requests\API\LoginRequest;
+use App\Http\Requests\API\RegisterRequest;
+use App\Http\Requests\API\UploadProfileRequest;
 use App\Models\Employee;
 use App\Models\Restaurant;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class RestaurantController extends Controller
 {
-    function login(Request $request)
+    function login(LoginRequest $request)
     {
-        $validator = $request->validate([
-            "email" => "required|string",
-            "password" => "required|string|min:6"
-        ]);
+        $validator = $request->validated();
 
         $restaurant = Restaurant::where("email", $validator["email"])->firstOrFail();
         if (!$restaurant || !Hash::check($validator["password"], $restaurant->password)) {
@@ -34,16 +34,10 @@ class RestaurantController extends Controller
         }
     }
 
-    function register(Request $request)
+    function register(RegisterRequest $request)
     {
 
-        $validator = $request->validate([
-            "name" => "required|string|max:255",
-            "address" => "required|string|max:255",
-            "phone_contact" => "required|string|max:255",
-            "email" => "required|string",
-            "password" => "required|string|min:6|confirmed"
-        ]);
+        $validator = $request->validated();
 
         $restaurant = Restaurant::create([
             "name" => $validator["name"],
@@ -57,7 +51,7 @@ class RestaurantController extends Controller
 
         return response()->json([
             "status" => 201,
-            "message" => "Restaurant registered successfully",
+            "message" => "$restaurant->name registered successfully",
         ], 201);
     }
 
@@ -72,15 +66,10 @@ class RestaurantController extends Controller
         ]);
     }
 
-    function createEmployeeAccount(Request $request) 
+    function createEmployeeAccount(CreateEmployeeRequest $request) 
     {
 
-        $validator = $request->validate([
-            "name" => "required|string|max:255",
-            "email" => "required|string",
-            "password" => "required|string|min:6",
-            "restaurant_id" => "required|string"
-        ]);
+        $validator = $request->validated();
 
         function generateEmployeeId() {
             $today = date('Ymd');
@@ -103,12 +92,10 @@ class RestaurantController extends Controller
         ], 201);
     }
 
-    function uploadProfile(Request $request) 
+    function uploadProfile(UploadProfileRequest $request) 
     {
 
-        $validator = $request->validate([
-            "image" => "required|image|mimes:jpg,jpeg,png",
-        ]);
+        $validator = $request->validated();
 
         $user = auth()->user();
 
