@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\API\MenuUpdateRequest;
 use App\Http\Requests\API\UpdateImageRequest;
-use App\Http\Requests\MenuStoreRequest;
+use App\Http\Requests\API\MenuStoreRequest;
 use App\Models\Menu;
 use App\Models\Restaurant;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class MenuController extends Controller
@@ -46,7 +45,7 @@ class MenuController extends Controller
             $image = $request->file("image");
             $fileName = $image->hashName();
             $image->storeAs("public/images/menu/", $fileName);
-            $imageUrl = url("storage/images/menu/" . $fileName);
+            $imageUrl = asset("storage/images/menu/" . $fileName);
 
             $menu = Menu::create([
                 "name" => $validator["name"],
